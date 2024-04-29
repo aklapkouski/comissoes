@@ -1,0 +1,12 @@
+WITH cte_comissoes AS (
+SELECT vendedor, 
+       valor,
+       ROW_NUMBER() OVER(PARTITION BY vendedor ORDER BY valor DESC) AS ranking
+FROM `teste.comissoes`)
+
+SELECT vendedor
+FROM cte_comissoes
+WHERE  ranking <= 3
+GROUP BY vendedor
+HAVING SUM(valor) >= 1024
+ORDER BY vendedor ASC
